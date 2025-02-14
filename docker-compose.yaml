@@ -1,0 +1,36 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: test_user:1.0.0
+    container_name: test_user
+    env_file:
+      - .env
+    ports:
+      - ${APP_PORT}:${APP_PORT}
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    networks:
+      - app-network
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+volumes:
+
+  postgres-data:
+
+networks:
+
+  app-network:
+    driver: bridge
