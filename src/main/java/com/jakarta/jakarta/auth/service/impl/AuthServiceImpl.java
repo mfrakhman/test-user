@@ -56,11 +56,13 @@ public class AuthServiceImpl implements AuthService {
                 )
         );
 
-        String accessToken = jwtUtil.generateAccessToken(findUser.getEmail(), findUser.getId());
+        String accessToken = jwtUtil.generateAccessToken(findUser.getEmail());
+        String refreshToken = jwtUtil.generateRefreshToken(findUser.getEmail());
 
         AuthResponseDto response = new AuthResponseDto();
         response.setUsername(findUser.getUsername());
-        response.setToken(accessToken);
+        response.setAccessToken(accessToken);
+        response.setRefreshToken(refreshToken);
         return response;
     }
 }

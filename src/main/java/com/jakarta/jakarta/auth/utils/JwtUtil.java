@@ -8,22 +8,18 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.function.Function;
 
 @Component
 public class JwtUtil {
     private final String secret = "0fYYTZLWwI8zdG+vDciZHL6wQI4u1XedL4DLgp2J2Vc=";
-    private final long accessTokenValidity = 30 * 60 * 1000 * 1000;
-    private final long refreshTokenValidity = 24 * 60 * 60 * 1000;
+    private final long EIGHT_HOURS = 8 * 60 * 60 * 1000;
+    private final long TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
-    public String generateAccessToken(String email, Long userId) {
+    public String generateAccessToken(String email) {
         return Jwts.builder()
                 .subject(email)
-                .claims(new HashMap<String, Object>() {{
-                    put("userId", userId);
-                }})
-                .expiration(new Date(System.currentTimeMillis() + accessTokenValidity))
+                .expiration(new Date(System.currentTimeMillis() + EIGHT_HOURS))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -31,7 +27,7 @@ public class JwtUtil {
     public String generateRefreshToken(String email) {
         return Jwts.builder()
                 .subject(email)
-                .expiration(new Date(System.currentTimeMillis() + refreshTokenValidity))
+                .expiration(new Date(System.currentTimeMillis() + TWENTY_FOUR_HOURS))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS256)
                 .compact();
     }

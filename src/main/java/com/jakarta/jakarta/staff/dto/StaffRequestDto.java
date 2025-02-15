@@ -7,9 +7,6 @@ import lombok.Data;
 @Data
 public class StaffRequestDto {
 
-    @NotNull
-    private Long userId;
-
     @NotBlank
     private String firstName;
 
